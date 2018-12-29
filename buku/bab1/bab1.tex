@@ -1,0 +1,81 @@
+\chapter{PENDAHULUAN}
+Pada bab ini akan dijelaskan latar belakang, rumusan masalah, batasan masalah, tujuan, manfaat, metodologi dan sistematika penulisan Tugas Akhir.
+
+\section{\quad Latar Belakang}
+\quad Di dalam ilmu komputer, terdapat permasalahan pengaplikasian struktur data yang tepat, guna memecahkan permasalahan yang ada. Hal ini dikarenakan banyaknya jenis struktur data dan kegunaannya yang beragam. Peneliti mencoba mencari beberapa permasalahan yang berkaitan dengan pengaplikasian struktur data dalam dunia pemrograman dan menemukan permasalahan di situs \textit{online} SPOJ. Di dalam situs tersebut terdapat sebuah permasalahan dengan nama \problem\cite{listree}.
+
+\quad Pada permasalahan ini diberikan masukan berupa bilangan bulat yang disimbolkan N, yang merepresentasikan jumlah \textit{node} di sebuah \textit{tree}. Dari \textit{tree} tersebut diminta untuk mencari \textit{Longest Increasing Subsequence} (LIS).\\
+Hasil Tugas Akhir ini diharapkan dapat memberi gambaran mengenai penerapan \textit{disjoint set union} pada struktur data \textit{tree}.
+
+\section{\quad Rumusan Masalah}
+\quad Rumusan masalah yang diangkat dalam Tugas Akhir ini adalah sebagai berikut:
+\begin{enumerate}
+	\item Bagaimana menyelesaikan \problem\cite{listree} pada situs penilaian SPOJ?
+	\item Bagaimana menerapkan konsep \textit{disjoint set union} pada struktur data \textit{segment tree}?
+	\item Bagaimana kinerja algoritma \textit{disjoint set union} pada struktur data \textit{segment tree} dalam menyelesaikan \problem\cite{listree}?
+\end{enumerate}
+
+\section{\quad Batasan Masalah}
+\quad Permasalahan yang dibahas pada Tugas Akhir ini memiliki beberapa batasan, yaitu sebagai berikut:
+
+\begin{enumerate}
+	\item Implementasi algoritma menggunakan bahasa pemrograman C++.
+	\item Besar ukuran berkas masukkan dalam sekali uji maksimal 2 MB.
+	\item Banyak kasus uji disimbolkan T, dengan rentang $ 1 $ - $ 1000 $.
+	\item Jumlah \textit{node} yang disimbolkan N berkisar antara $ 1 $ - $ 100.000 $.
+	\item Berikutnya sebanyak N-1 baris diinputkan 2 angka disimbolkan a dan b dengan syarat a ≥ 1 dan b ≤ N, yang merepresentasikan bahwa vertex a terhubung dengan vertex b.
+	\item Kombinasi dari vertex a dan b haruslah unik.
+	\item Penyimpanan yang dibutuhkan dalam 1 kali percobaan kurang dari 1536 MB.
+	\item Batas waktu pada program untuk setiap percobaan kurang dari $ 1 $ detik.
+
+\end{enumerate}
+
+\section{\quad Tujuan}
+\quad Tujuan dari Tugas Akhir ini adalah sebagai berikut:
+\begin{enumerate}
+	\item Melakukan desain dan implementasi penyelesaian \problem\cite{listree} pada situs penilaian SPOJ.
+	\item Menganalisis hasil kinerja penyelesaian \problem\cite{listree}.
+\end{enumerate}
+
+\section{\quad Metodologi}
+\quad Ada beberapa tahap dalam proses pengerjaan tugas akhir ini, yaitu sebagai berikut:
+\begin{enumerate}
+	\item Studi Literatur\\
+	Pada tahap ini, dilakukan studi mengenai pengimplementasian \textit{disjoint set union} pada struktur data \textit{segment tree} serta algoritman penyelesaian \textit{Longest Increasing Subsequence}. Sumber studi antara lain dari buku-buku literatur, situs-situs pembelajaran \textit{online}, dan materi kuliah yang bersangkutan.
+	\item Implementasi\\
+	Pada Tahap ini, akan dilakukan pembangunan dari algoritma yang telah dipelajari menjadi sebuah sistem yang dapat digunakan. Bahasa pemrograman yang digunakan adalah C++ dengan menggunakan IDE(\textit{Integrated Development System}) Dev-C++.
+	\item Uji Coba\\
+	Tahap ini merupakan tahap pengujian aplikasi dengan data masukan yang telah ditentukan untuk menguji kebenaran hasil implementasi algoritma serta menguji waktu eksekusi aplikasi untuk data masukan yang telah ditentukan. Pada tahap ini juga dilakukan optimasi dari hasil implementasi apabila aplikasi masih kurang efisien.
+	\item Penyusunan buku tugas akhir\\
+	Tahap ini merupakan tahap penyusunan laporan berupa buku tugas akhir sebagai dokumentasi pelaksanaan tugas akhir yang mencakup seluruh teori, implementasi serta hasil pengujian yang telah dikerjakan.\\\\
+\end{enumerate}
+
+	\section{\quad Sistematika Penulisan Laporan}
+	\quad Berikut adalah sistematika penulisan buku Tugas Akhir ini:
+	\begin{enumerate}
+		\item BABI: PENDAHULUAN
+		
+		Bab ini berisi latar belakang, rumusan masalah, batasan masalah, tujuan, manfaat, metodologi dan sistematika penulisan Tugas Akhir.
+		
+		\item BAB II: DASAR TEORI
+		
+		Bab ini berisi dasar teori mengenai permasalahan dan algoritma penyelesaian yang digunakan dalam Tugas Akhir
+		
+		\item BAB III: DESAIN
+		
+		Bab ini berisi desain algoritma dan struktur data yang digunakan dalam penyelesaian permasalahan.
+		
+		\item BAB IV: IMPLEMENTASI
+		
+		Bab ini berisi implementasi berdasarkan desain algortima yang telah dilakukan pada tahap desain.
+		
+		\item BAB V: UJI COBA
+		
+		Bab ini berisi uji coba dan evaluasi dari hasil implementasi yang telah dilakukan pada tahap implementasi.
+		
+		\item BAB VI: PENUTUP
+		
+		Bab ini berisi kesimpulan dan saran yang didapat dari hasil uji coba yang telah dilakukan.
+	\end{enumerate}
+
+\cleardoublepage

@@ -1,0 +1,32 @@
+% lembarpengesahan
+\makeatletter
+\def\legalityPaper{%
+\newpage%
+    \begin{centering}%
+    	\textbf{\large{LEMBAR PENGESAHAN}} \\*[10pt]%
+        \textbf{\MakeUppercase{\judul}} \\*[10pt]%
+        \textbf{\MakeUppercase{TUGAS AKHIR}} \\*%
+        Diajukan Guna Memenuhi Salah Satu Syarat \\*%
+        Memperoleh Gelar \gelar \\*%
+        pada \\*%
+        Bidang Studi \bidangStudi \\*%
+        Program Studi \prodi  \jurusan \\*%
+        Fakultas \fakultas \\*%
+        Institut Teknologi Sepuluh Nopember \\*[10pt]%
+        Oleh : \\*%
+        \textbf{\MakeUppercase{\penulis}} \\*%
+        \textbf{NRP: \nrp} \\*[20pt]%
+    \end{centering}%
+
+    {\noindent Disetujui oleh Dosen Pembimbing Tugas Akhir :}\\*[15pt]         
+    \pembimbingSatu \hfill \hfill ........................ \\ NIP: \nipPembimbingSatu \hfill \hfill (Pembimbing 1) \\*[15pt]%
+    %
+    \ifdef{\pembimbingDua}{{\noindent \pembimbingDua  \hfill \hfill .........................}  \\ NIP: \nipPembimbingDua \hfill \hfill (Pembimbing 2) \\*[20pt]}{}%
+
+    \begin{centering}%
+        \textbf{SURABAYA} \\*
+        \textbf{\bulan \tahun} \\*%
+    \end{centering}%
+    \cleardoublepage%
+}%
+\makeatother

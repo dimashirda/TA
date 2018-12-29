@@ -1,0 +1,124 @@
+\chapter{IMPLEMENTASI}
+\label{chapter:implementasi}
+
+Pada bab ini dijelaskan mengenai implementasi dari desain dan algoritma penyelesaian \problem{}.
+
+\section{\quad Lingkungan Implementasi}
+Lingkungan implementasi dalam pembuatan Tugas Akhir ini meliputi perangkat keras dan perangkat lunak yang digunakan untuk penyelesaian \problem{} adalah sebagai berikut:
+\begin{enumerate}
+	\item Perangkat Keras:
+		\begin{itemize}
+			\item \textit{Processor} AMD A8-6410 4 Cores 2.0 Ghz up to 2.4 GHz.
+			\item Memori 8 Gb.
+		\end{itemize}
+	\item Perangkat Lunak:
+		\begin{itemize}
+			\item Sistem Operasi: Windows 8.1 64 bit.
+			\item IDE: Orwell Bloodshed Dev-C++ 5.11.
+			\item Compiler: g++ (TDM-GCC 4.9.2 64-bit).
+			\item Bahasa Pemrogramman: C++.
+		\end{itemize}
+\end{enumerate}
+
+\section{\quad Implementasi Penyelesaian Permasalahan \textit{LIS and TREE by value}}
+\quad Pada subbab ini akan dijelaskan mengenai implementasi dari penyelesaian permasalahan \textit{LIS and TREE} sesuai dengan desain pada subbab 3.1.
+
+	\subsection{\quad Penggunaan \textit{Library}, Konstanta dan Variabel \textit{Global}}
+	\quad Pada Subbab ini akan dibahas penggunaan \textit{library}, \textit{template}, konstanta dan variabel global yang digunakan dalam sistem. Pada Kode sumber \ref{source:header} terdapat dua \textit{library} yang digunakan yaitu: iostream dan vector. Didefinisikan konstanta N bernilai 100001 merupakan jumlah node maksimal. Pada Tabel \ref{tabel:var_global} dan \ref{tabel:var_global2} dijelaskan mengenai variabel-variabel global yang akan digunakan dalam implementasi program.	
+	\lstinputlisting[language=C++, firstline=1, lastline=4, caption=Potongan kode \textit{library} dan konstanta, label=source:header]{assets/code/include.cpp}
+	\begin{table}[H]
+		\vspace{-0.25cm}
+		\centering
+		\begin{tabular}{|p{0.5cm}|p{3cm}|p{2.5cm}|p{3cm}|}
+		\hline
+		No&Nama Variabel&Tipe&Penjelasan \\ \hline
+		1&ans&int&Digunakan untuk menyimpan jawaban soal \\ \hline
+		2&cnt&int&Digunakan sebagai penghitung jumlah \textit{child}.\\ \hline
+		3&size&int []&Digunakan untuk menyimpan ukuran tiap \textit{subtree}.\\ \hline
+		4&num&int []&Digunakan untuk menyimpan urutan dari \textit{node} masukan.\\ \hline
+		5&in&int []&Digunakan untuk perulangan pada subtree.\\ \hline
+		\end{tabular}\caption{Daftar variabel global bagian 1. \label{tabel:var_global}}	
+	\end{table}
+	\begin{table}[H]
+		\centering
+		\begin{tabular}{|p{0.5cm}|p{3cm}|p{2.5cm}|p{3cm}|}
+			\hline
+			No&Nama Variabel&Tipe&Penjelasan \\ \hline
+			6&out&int[]&Digunakan untuk perulangan pada subtree.\\ \hline			
+			7&dpUp&int []&Digunakan untuk menyimpan nilai LDS pada suatu \textit{node}.\\ \hline
+			8&dpDec&int []&Digunakan untuk menyimpan nilai LIS pada suatu \textit{node}.\\ \hline
+			9&inc&int []&Digunakan sebagai representasi \textit{segment tree} untuk nilai LIS.\\ \hline
+			10&dcr&int []&Digunakan sebagai representasi \textit{segment tree} untuk nilai LDS.\\ \hline
+			11&inp&vector<int> []&Digunakan untuk menyimpan \textit{disjoint set union} untuk tiap \textit{node} masukan.\\ \hline
+		\end{tabular}\caption{Daftar variabel global bagian 2. \label{tabel:var_global2}}	
+	\end{table} 
+	\subsection{\quad Implementasi Fungsi \textit{Main}}
+	\quad Fungsi Main diimplementasikan sesuai dengan \textit{pseudocode} pada bab sebelumnya.\\\\
+	\lstinputlisting[language=C++, firstline=1, lastline=27, caption=Potongan kode fungsi main, label=source:main]{assets/code/main.cpp}
+	Fungsi main yang diimplementasikan seperti pada \ref{source:main} digunakan untuk mengosongkan terlebih dahulu vector yang akan digunakan (baris kode 8 hingga 11) dan membaca masukan pada sistem (baris kode 12 hingga 19).\vspace{-0.5cm}
+	\subsection{\quad Implementasi Fungsi \textit{Init}}
+	\quad Fungsi Init diimplementasikan pada Kode sumber \ref{source:init} sesuai dengan \textit{pseudocode} pada bab sebelumnya.
+	\lstinputlisting[language=C++, firstline=1, lastline=13, caption=Potongan kode fungsi init, label=source:init]{assets/code/init.cpp}
+	\subsection{\quad Implementasi Fungsi Dfs}
+	\quad Fungsi Dfs diimplementasikan pada Kode sumber \ref{source:dfs1}, \ref{source:dfs2}, \ref{source:dfs3} sesuai dengan \textit{pseudocode} pada bab sebelumnya.
+	\lstinputlisting[language=C++, firstline=1, lastline=16, caption=Potongan kode fungsi dfs bagian 1, label=source:dfs1]{assets/code/dfs.cpp}
+	\lstinputlisting[language=C++, firstnumber=17, firstline=17, lastline=51, caption=Potongan kode fungsi dfs bagian 2, label=source:dfs2]{assets/code/dfs.cpp}
+	\vspace{2cm}
+	\lstinputlisting[language=C++, firstnumber=52, firstline=52, lastline=74, caption=Potongan kode fungsi dfs bagian 3, label=source:dfs3]{assets/code/dfs.cpp}
+	\subsection{\quad Implementasi Fungsi Query}
+	\quad Fungsi Dfs diimplementasikan pada Kode sumber \ref{source:query} dan \ref{source:query2} sesuai dengan \textit{pseudocode} pada bab sebelumnya.
+	\lstinputlisting[language=C++, firstnumber=1, firstline=1, lastline=6, caption=Potongan kode fungsi query bagian 1, label=source:query]{assets/code/query.cpp}
+	\lstinputlisting[language=C++, firstnumber=7, firstline=7, lastline=23, caption=Potongan kode fungsi query bagian 2, label=source:query2]{assets/code/query.cpp}
+	\vspace{-0.5cm}
+	\subsection{\quad Implementasi Fungsi Update}
+	\quad Fungsi update diimplementasikan pada Kode sumber \ref{source:query} dan \ref{source:query2} sesuai dengan \textit{pseudocode} pada bab sebelumnya.
+	\lstinputlisting[language=C++, firstnumber=1, firstline=1, lastline=13, caption=Potongan kode fungsi update bagian 1, label=source:update]{assets/code/update.cpp}
+	\lstinputlisting[language=C++, firstnumber=14, firstline=14, lastline=20, caption=Potongan kode fungsi update bagian 2, label=source:update2]{assets/code/update.cpp}
+\section{\quad Implementasi Penyelesaian Permasalahan \textit{LIS and TREE by reference}}
+\quad Pada subbab ini akan dijelaskan mengenai implementasi dari penyelesaian permasalahan \textit{LIS and TREE} sesuai dengan desain pada subbab 3.2.	
+	\subsection{\quad Penggunaan \textit{Library}, Konstanta dan Variabel \textit{Global}}
+	\quad Pada Subbab ini akan dibahas penggunaan \textit{library}, \textit{template}, konstanta dan variabel global yang digunakan dalam sistem. Pada Kode sumber \ref{source:headerp} terdapat dua \textit{library} yang digunakan yaitu: iostream dan vector. Didefinisikan konstanta N bernilai 100001 merupakan jumlah node maksimal. Pada Tabel \ref{tabel:var_globalp} dijelaskan mengenai variabel-variabel global yang akan digunakan dalam implementasi program.
+	\lstinputlisting[language=C++, firstline=1, lastline=4, caption=Potongan kode \textit{library} dan konstanta, label=source:headerp]{assets/code/include.cpp}
+	\begin{table}[H]
+		\centering
+		\begin{tabular}{|p{0.5cm}|p{3cm}|p{2.5cm}|p{3cm}|}
+			\hline
+			No&Nama Variabel&Tipe&Penjelasan \\ \hline
+			1&size&int []&Digunakan untuk menyimpan ukuran tiap \textit{subtree}.\\ \hline
+			2&result&int&Digunakan untuk menyimpan hasil akhir LIS.\\ \hline
+			3&inp&int []&Digunakan untuk menyimpan \textit{disjoint set union} untuk tiap \textit{node} masukan.\\ \hline
+			4&uplis&vector*<int> []&Digunakan untuk menyimpan hasil LIS sementara.\\ \hline
+			5&uplds&vector*<int> []&Digunakan untuk menyimpan hasil LDS sementara.\\ \hline
+		\end{tabular}\caption{Daftar variabel global. \label{tabel:var_globalp}}	
+	\end{table}
+	\subsection{\quad Implementasi Fungsi \textit{Main}}
+	\quad Fungsi Main diimplementasikan sesuai dengan \textit{pseudocode} pada bab sebelumnya ditunjukkan pada Kode sumber \ref{source:mainp} dan \ref{source:mainp2}.
+	\lstinputlisting[language=C++, firstline=1, lastline=7, caption=Potongan kode fungsi main bagian 1, label=source:mainp]{assets/code/mainp.cpp}
+	\lstinputlisting[language=C++, firstnumber=8, firstline=8, lastline=29, caption=Potongan kode fungsi main bagian 2, label=source:mainp2]{assets/code/mainp.cpp}
+	\vspace{-1cm}
+	\subsection{\quad Implementasi Fungsi \textit{Init}}
+	\quad Fungsi Init diimplementasikan pada Kode sumber \ref{source:initp} sesuai dengan \textit{pseudocode} pada bab sebelumnya.
+	\lstinputlisting[language=C++, firstline=1, lastline=10, caption=Potongan kode fungsi init, label=source:initp]{assets/code/initp.cpp}
+	\subsection{\quad Implementasi Fungsi Dfs}
+	\quad Fungsi Dfs diimplementasikan pada Kode sumber \ref{source:dfsp1}, \ref{source:dfsp2}, \ref{source:dfsp3}  sesuai dengan \textit{pseudocode} pada bab sebelumnya.
+	\lstinputlisting[language=C++, firstline=1, lastline=30, caption=Potongan kode fungsi dfs bagian 1, label=source:dfsp1]{assets/code/dfsp.cpp}
+	\vspace{1cm}
+	\lstinputlisting[language=C++, firstnumber=31, firstline=31, lastline=67, caption=Potongan kode fungsi dfs bagian 2, label=source:dfsp2]{assets/code/dfsp.cpp}
+	\lstinputlisting[language=C++, firstnumber=68, firstline=68, lastline=85, caption=Potongan kode fungsi dfs bagian 3, label=source:dfsp3]{assets/code/dfsp.cpp}
+	\vspace{-0.6cm}
+	\subsection{\quad Implementasi Fungsi \textit{Addto}}
+	\quad Fungsi Addto diimplementasikan pada Kode sumber \ref{source:addto}, sesuai dengan \textit{pseudocode} pada bab sebelumnya.
+	\lstinputlisting[language=C++, firstline=1, lastline=12, caption=Potongan kode fungsi addto, label=source:addto]{assets/code/addto.cpp}
+	\subsection{\quad Implementasi Fungsi \textit{Combine}}
+	\quad Fungsi Combine diimplementasikan pada Kode sumber \ref{source:combine}, sesuai dengan \textit{pseudocode} pada bab sebelumnya.
+	\lstinputlisting[language=C++, firstline=1, lastline=17, caption=Potongan kode fungsi combine, label=source:combine]{assets/code/combine.cpp}
+	
+\section{\quad Data Generator}
+\quad Kode sumber \ref{source:generator}, \ref{source:generator2}, dan \ref{source:generator3}  untuk membuat data yang akan digunakan pada uji coba.
+\lstinputlisting[language=C++, firstline=1, lastline=6, caption=Potongan kode data generator, label=source:generator]{assets/code/generator.cpp}
+\lstinputlisting[language=C++, firstnumber =7, firstline=7, lastline=36, caption=Potongan kode data generator bagian 2, label=source:generator2]{assets/code/generator.cpp}
+\vspace{4.5cm}	
+\lstinputlisting[language=C++, firstnumber =37, firstline=37, lastline=51, caption=Potongan kode data generator bagian 3, label=source:generator3]{assets/code/generator.cpp}
+\quad Program akan memasukan nilai $1$ hingga $num$ pada \textit{$array$}, terlihat pada baris kode 19 hingga 20 pada kode sumber. Kemudian akan membangkitkan bilangan secara acak dari \textit{$array$} tersebut, yang akan merepresentasikan $a$ dan $b$ sesuai permintaan soal. Agar bilangan yang sama tidak muncul kembali maka bilangan tersebut akan dihilangkan dari \textit{$array$} terlihat pada baris kode 26 hingga 27. Kemudian untuk nilai dari variabel $a$ berikutnya akan diambil dari nilai yang sudah dihilangkan, terlihat pada baris kode 38 hingga 50. Sehingga semua nilai dipastikan keluar dan unik, seperti permintaan dari soal.
+	
+	

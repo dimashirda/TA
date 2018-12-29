@@ -1,0 +1,453 @@
+\chapter{DESAIN}
+\label{chapter:desain}
+
+Pada bab ini akan dibahas tentang desain dan algoritma untuk menyelesaikan permasalahan pada Tugas Akhir ini.
+
+\section{\quad Desain Penyelesaian Permasalahan \textit{LIS and TREE by value}}
+\quad Pada subbab ini akan dijelaskan desain penyelesaian permasalahan \textit{LIS and TREE} dengan pendekatan \textit{Segment Tree}.
+	\subsection{\quad Definisi Umum Sistem}
+	\quad Sistem akan menerima masukan berupa sebuah bilangan bulat $T$ yang mewakili banyaknya kasus uji. Selanjutnya sistem menerima masukan sebuah bilangan bulat $n$ yang mewakili jumlah \textit{node} untuk kasus uji tersebut. Kemudian sistem akan menerima masukan berupa dua buah bilangan bulat $a$ dan $b$ yang merepresentasikan nilai dan hubungan antar \textit{node} seperti yang telah dijelaskan pada subbab 2.6. Kemudian sistem akan menggambarkan masukkan tersebut sebagai sebuah \textit{tree} dengan memanggil fungsi \textit{init} setelah \textit{tree} terbentuk akan melakukan pencarian LIS yang akan memenuhi persoalan tersebut, yang pada akhirnya akan menjadi keluaran akhir dari program. Pseudocode fungsi \textit{main} ditunjukkan oleh Gambar \ref{figure:fungsi_main}.
+	
+	\quad Pada fungsi \textit{main} terdapat variabel $T$ yang merupakan jumlah kasus uji dan $n$ yang merupakan jumlah \textit{node}. Setiap akan menerima masukan baru, fungsi \textit{main} akan mengosongkan terlebih dahulu isi daripada masukan yang sebelumnya, dilakukan dengan menggunakan fungsi \textit{clear} (baris ke 5). Kemudian fungsi akan memasukkan \textit{push} (baris ke 8 dan 9) nilai masukan yang baru. Lalu akan dipanggil fungsi \textit{init} dan \textit{dfs} yang akan dijelaskan pada subbab berikutnya.
+	\begin{figure}
+		\vspace{-0.5cm}\centering
+		\begin{tabular}{|p{3cm}|p{6cm}|}
+			\hline
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				$\proc{Main}()$}\\ \hline
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				1 $\proc{\textbf{input}}\quad T$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				2 \While $T--$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				3 \quad $\proc{\textbf{input}}\quad N$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				4 \quad $\proc{\textbf{for}}\quad i \quad \gets \quad 1 \quad \proc{\textbf{to}\quad N}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				5 \quad \quad $\proc{\textbf{Clear}(inp[i])}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				6 \quad $\proc{\textbf{for}}\quad i \quad \gets \quad 1 \quad \proc{\textbf{to}\quad N-1}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				7 \quad \quad $\proc{\textbf{input}}\quad a$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				8 \quad \quad $\proc{\textbf{input}}\quad b$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				9 \quad \quad $\proc{\textbf{Push}(inp[a],b)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				10 \quad \quad $\proc{\textbf{Push}(inp[a],b)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				11 \quad $\proc{ans} \quad \gets 0$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				12 \quad $\proc{cnt} \quad \gets 0$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				13 \quad $\proc{\textbf{init}(1,-1)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				14 \quad $\proc{\textbf{Dfs}(1,-1,0)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				15 \quad $\proc{\textbf{Output}\quad ans}$}\\
+				\hline
+		\end{tabular}
+		\caption{\textit{Pseudocode} Fungsi Main \label{figure:fungsi_main}}
+	\end{figure}	
+	\subsection{\quad Desain Algoritma}
+	\quad Sistem terdiri dari 4 fungsi utama, yaitu fungsi \textit{init}, \textit{dfs}, \textit{query}, \textit{update}. Pada subbab ini akan dijelaskan desain algoritma keempat fungsi tersebut.
+	\subsubsection{\quad Desain Fungsi \textit{init}}
+	\quad Fungsi \textit{init} digunakan untuk membentuk \textit{tree} dari masukan pada fungsi \textit{main}, ditunjukkan oleh Gambar \ref{figure:fungsi_init}. Variabel $now$ merepresentasikan nilai \textit{node} saat ini, dan $parent$ merepresentasikan nilai \textit{node} yang menjadi \textit{parent} dari \textit{node} saat ini. Pada fungsi ini dilakukan iterasi untuk mendapatkan total jumlah \textit{child} dari keseluruhan \textit{tree} untuk setiap \textit{node} dan dilakukan \textit{preorder numbering} yang diwakili oleh variabel $in[]$ dan $out[]$.
+	\begin{figure}
+		\vspace{-0.5cm}\centering
+		\begin{tabular}{|p{3cm}|p{6cm}|}
+			\hline
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				$\proc{init(now,parent)}$}\\ \hline
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				1 $\proc{size[now]\quad}\gets1$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				2 $\proc{in[now]\quad}\gets++cnt$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				3 $\proc{num[cnt]\quad}\gets now$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				4 $\proc{\textbf{for}}\quad i \quad \gets \quad 0 \quad \proc{\textbf{to}\quad Sizeof(inp[now]-1)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				5 \quad \If $\proc{inp[now][i]}\gets parent\quad\proc{\textbf{continue}}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				6 \quad $\proc{\textbf{init}(inp[now][i],now)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				7 \quad $\proc{size[now]}\quad\gets\proc{size[now]\quad+\quad size[inp[now][i]}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				8 $\proc{out[now]}\quad\gets\proc{cnt}$}\\
+			\hline
+		\end{tabular}
+		\caption{\textit{Pseudocode} Fungsi init \label{figure:fungsi_init}}
+	\end{figure}
+	\subsubsection{\quad Desain Fungsi \textit{Dfs}}
+	\quad Fungsi DFS merupakan fungsi utama untuk menemukan LIS dari \textit{path} yang ada ditunjukkan oleh Gambar \ref{figure:fungsi_dfs}. Parameter variabel yang dibutuhkan adalah $now$ sebagai representasi nilai \textit{node} saat ini, $parent$ sebagai representasi nilai dari \textit{parent} untuk \textit{node} saat ini, dan $flag$ sebagai variabel penanda apakah \textit{node} tersebut merupakan \textit{bigchild} atau \textit{smallchild}. Di awal fungsi (baris kode 1-5) dilakukan penentuan \textit{node} mana yang menjadi \textit{big child} atau \textit{small child}, hal ini ditentukan dengan cara membandingkan ukuran \textit{node} tersebut dengan \textit{sibling}nya. Kemudian fungsi akan melakukan rekursi ke \textit{node} yang menjadi \textit{smallchild} (baris kode 6-9) dan dilanjutkan rekursi ke \textit{node} yang menjadi \textit{bigchild} (baris kode 10-11). Setelah itu dilakukan perulangan untuk setiap \textit{child} dari \textit{node} kecuali \textit{bigchild} dalam perulangan ini dilakukan pencarian LIS dan LDS serta melakukan \textit{update} pada \textit{segment tree} untuk nilai LIS dan LDS di \textit{subtree} sebelumnya (baris kode 12-31). Lalu jika \textit{node} yang telah diproses merupakan \textit{smallchild} maka isi \textit{segment tree} akan di kembalikan seperti semula, jika tidak isi \textit{segment tree} akan dipertahankan (baris kode 32-36). Pada prosesnya fungsi \textit{dfs} juga memanggil fungsi lain yaitu $query$ dan $update$.
+	 
+	\quad Fungsi $query$ ditunjukkan oleh Gambar \ref{figure:fungsi_query}. Terdapat 6 variabel yang menjadi parameter untuk fungsi ini, $idx$ merepresentasikan posisi \textit{node} saat ini, $l$ dan $r$ merupakan representasi rentang index yang diwakili oleh \textit{node} saat ini, $x$ dan $y$ merupakan representasi rentang index yang akan diambil nilainya, $flag$ merupakan penanda apakah harus mengambil nilai di \textit{segment tree} yang berisikan LIS atau LDS. Fungsi ini akan melakukan rekursi ke \textit{left child} kemudian dilanjutkan ke \textit{right child} hingga pada akhirnya mendapatkan nilai maksimal dari kedua rentang tersebut.
+	 
+	\quad Fungsi \textit{update} yang ditunjukkan oleh Gambar \ref{figure:fungsi_update}. Terdapat 6 variabel yang menjadi parameter untuk fungsi ini, $idx$ merepresentasikan posisi \textit{node} saat ini, $l$ dan $r$ merupakan representasi rentang index yang diwakili oleh \textit{node} saat ini, $x$ merupakan representasi index yang ingin di\textit{update}.
+		\begin{figure}
+			\vspace{-0.5cm}\centering
+			\begin{tabular}{|p{9cm}|p{9cm}|}
+				\hline
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					$\proc{Dfs}(now,parent,flag)$}\\ \hline
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					1 $\proc{\textbf{for}}\quad i \quad \gets \quad 0 \quad \proc{\textbf{to}\quad Sizeof(inp[now]-1)}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					2 \quad \If \quad $\proc{temp}\quad\gets\proc{parent}\quad\proc{\textbf{continue}}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					3 \quad \If $\proc{size[temp]}>maks$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					4 \quad \quad $\proc{maks}\quad\gets\quad\proc{size[temp]}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					5 \quad \quad $\proc{bigchild}\quad\gets\quad\proc{temp}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					6 $\proc{\textbf{for}}\quad i \quad \gets \quad 0 \quad \proc{\textbf{to}\quad Sizeof(inp[now]-1)}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					7 \quad $\proc{temp}\quad\gets\quad\proc{inp[now][i]}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					8 \quad \If $\proc{temp\quad!=\quad parent}\quad \textbf{and} \quad \proc{temp\quad!=\quad bigchild}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					9 \quad \quad $\proc{\textbf{Dfs}(temp,now,0)}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					10 \If $\proc{bigchild}\quad\gets\quad0$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					11 \quad $\proc{\textbf{Dfs}(big,now,1)}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					12 $\proc{\textbf{for}}\quad i \quad \gets \quad 0 \quad \proc{\textbf{to}\quad Sizeof(inp[now]-1)}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					13 \quad $\proc{temp}\quad\gets\quad\proc{inp[now][i]}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					14 \quad \If $\proc{temp\quad=\quad parent}\quad \textbf{and} \quad \proc{temp\quad=\quad bigchild}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					15 \quad \quad $\textbf{continue}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					16 \quad $\proc{\textbf{foreach}\quad child\quad\textbf{in}\quad temp}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					17 \quad \quad \If $\proc{child\quad<\quad now}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					18 \quad \quad \quad 
+					$\proc{maks=\textbf{query}(0,1,N,now+1,N,1)}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					19 \quad \quad \quad $\proc{ans=\textbf{max}(ans,maks+1+dpUp[child])}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					20 \quad \quad $\proc{\textbf{else}}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					21 \quad \quad \quad $\proc{maks=\textbf{query}(0,1,N,1,now-1,0)}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					22 \quad \quad \quad $\proc{ans=\textbf{max}(ans,maks+1+dpDec[child])}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					23 \quad $\proc{maks=\textbf{query}(0,1,N,1,child-1,0)}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					24 \quad $\proc{ans=\textbf{max}(ans,maks+1+dpDec[child])}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					25 \quad $\proc{maks=\textbf{query}(0,1,N,child+1,N,1)}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					26 \quad $\proc{ans=\textbf{max}(ans,maks+1+dpUp[child])}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					27 \quad $\proc{\textbf{foreach}\quad child\quad\textbf{in}\quad temp}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					28 \quad \quad $\proc{\textbf{update}(0,1,N,child,dpUp[child],dpDec[child])}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					29 $\proc{dpUp[now]=\textbf{query}(0,1,N,1,now-1,0)+1}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					30 $\proc{dpDec[now]=\textbf{query}(0,1,N,now+1,N,1)+1}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					31 $\proc{ans=\textbf{max}(ans,\textbf{max}(dpUp[now],dpDec[now]))}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					32 \If $\proc{flag\quad=\quad0}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					33 \quad $\proc{\textbf{foreach}\quad child\quad\textbf{in}\quad now}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					34 \quad \quad $\proc{\textbf{update}(0,1,N,child,0,0)}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					35 $\proc{\textbf{else}}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					36 \quad $\proc{\textbf{update}(0,1,N,now,dpUp[now],dpDec[now])}$}\\
+				\hline
+			\end{tabular}
+			\caption{\textit{Pseudocode} Fungsi Dfs \label{figure:fungsi_dfs}}
+		\end{figure}
+	\begin{figure}
+		\vspace{-0.5cm}\centering
+		\begin{tabular}{|p{3cm}|p{6cm}|}
+			\hline
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				$\proc{query(idx,l,r,x,y,flag)}$}\\ \hline
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				1 \If $\proc{l > y or r < x}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				2 \quad $\proc{\textbf{return} 0}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				3 \If $\proc{x <= l and r <= y}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				4 \quad \If $\proc{flag = 0}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				5 \quad \quad $\proc{\textbf{return} inc[idx]}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				6 \quad $\proc{\textbf{else}}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				7 \quad \quad $\proc{\textbf{return} dec[idx]}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				8 $\proc{left = \textbf{query}((idx*2)+1,l,(l+r)/2,x,y,flag)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				9 $\proc{right = \textbf{query}((idx*2)+2,((l+r)/2)+1,r,x,y,flag)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				10 $\proc{\textbf{return max}(left,right)}$}\\
+			\hline
+		\end{tabular}
+		\caption{\textit{Pseudocode} Fungsi query \label{figure:fungsi_query}}
+	\end{figure}		 
+	\begin{figure}
+		\centering
+		\begin{tabular}{|p{3cm}|p{6cm}|}
+			\hline
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				$\proc{update(idx,l,r,x,a,b)}$}\\ \hline
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				1 \If $\proc{l = r}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				2 \quad $\proc{inc[idx] = a}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				3 \quad $\proc{dcr[idx] = b}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				4 \quad $\proc{\textbf{return}}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				5 \If $\proc{x <= (l+r)/2}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				6 \quad $\proc{\textbf{update}((idx*2)+1,l,(l+r)/2,x,a,b)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				7 $\proc{\textbf{else}}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				8 \quad $\proc{\textbf{update}((idx*2)+2,((l+r)/2)+1,r,x,a,b)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				9 $\proc{inc[idx] = \textbf{max}(inc[(idx*2)+1],inc[(idx*2)+2])}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				10 $\proc{dcr[idx] = \textbf{max}(dcr[(idx*2)+1],dcr[(idx*2)+2])}$}\\
+			\hline
+		\end{tabular}
+		\caption{\textit{Pseudocode} Fungsi update \label{figure:fungsi_update}}
+	\end{figure}
+
+	
+\section{\quad Desain Penyelesaian Permasalahan \textit{LIS and TREE by reference}}
+\quad Pada subbab ini akan dijelaskan desain penyelesaian permasalahan \textit{LIS and TREE} dengan pendekatan \textit{pointer}. 
+	\subsection{\quad Definisi Umum Sistem}
+	\quad Sistem akan menerima masukan berupa sebuah bilangan bulat $T$ yang mewakili banyaknya kasus uji. Selanjutnya sistem menerima masukan sebuah bilangan bulat $n$ yang mewakili jumlah \textit{node} untuk kasus uji tersebut. Kemudian sistem akan menerima masukan berupa dua buah bilangan bulat $a$ dan $b$ yang merepresentasikan nilai dan hubungan antar \textit{node} seperti yang telah dijelaskan pada subbab 2.6. Kemudian sistem akan menggambarkan masukkan tersebut sebagai sebuah \textit{tree} dengan memanggil fungsi \textit{init} setelah \textit{tree} terbentuk akan melakukan pencarian LIS yang akan memenuhi persoalan tersebut, yang pada akhirnya akan menjadi keluaran akhir dari program. Pseudocode fungsi \textit{main} ditunjukkan oleh Gambar \ref{figure:fungsi_main2}.
+	
+	\quad Pada fungsi \textit{main} terdapat variabel $T$ yang merupakan jumlah kasus uji dan $n$ yang merupakan jumlah \textit{node}. Setiap akan menerima masukan baru, fungsi \textit{main} akan mengosongkan terlebih dahulu isi daripada masukan yang sebelumnya, dilakukan dengan menggunakan fungsi \textit{clear} (baris ke 5). Kemudian fungsi akan memasukkan \textit{push} (baris ke 8 dan 9) nilai masukan yang baru. Lalu akan dipanggil fungsi \textit{init} dan \textit{dfs} yang akan dijelaskan pada subbab berikutnya.
+	\begin{figure}
+		\vspace{-0.5cm}\centering
+		\begin{tabular}{|p{3cm}|p{6cm}|}
+			\hline
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				$\proc{Main}()$}\\ \hline
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				1 $\proc{\textbf{input}}\quad T$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				2 \While $T--$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				3 \quad $\proc{\textbf{input}}\quad N$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				4 \quad $\proc{\textbf{for}}\quad i \quad \gets \quad 1 \quad \proc{\textbf{to}\quad N}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				5 \quad \quad $\proc{\textbf{Clear}(inp[i])}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				6 \quad $\proc{\textbf{for}}\quad i \quad \gets \quad 1 \quad \proc{\textbf{to}\quad N-1}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				7 \quad \quad $\proc{\textbf{input}}\quad a$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				8 \quad \quad $\proc{\textbf{input}}\quad b$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				9 \quad \quad $\proc{\textbf{Push}(inp[a],b)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				10 \quad \quad $\proc{\textbf{Push}(inp[a],b)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				11 \quad $\proc{result} \quad \gets 0$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				12 \quad $\proc{\textbf{init}(1,-1)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				13 \quad $\proc{\textbf{Dfs}(1,-1,\text{\&}a,\text{\&}b)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				14 \quad $\proc{\textbf{Output}\quad result}$}\\
+			\hline
+		\end{tabular}
+		\caption{\textit{Pseudocode} Fungsi Main \label{figure:fungsi_main2}}
+	\end{figure}
+	\subsection{\quad Desain Algoritma}
+	\quad Sistem terdiri dari 3 fungsi utama, yaitu fungsi \textit{init}, \textit{dfs}, \textit{addto}, \textit{combine}. Pada subbab ini akan dijelaskan desain algoritma keempat fungsi tersebut.
+	\subsubsection{\quad Desain Fungsi init}
+	\quad Fungsi \textit{init} digunakan untuk membentuk \textit{tree} dari masukan pada fungsi \textit{main}, ditunjukkan oleh Gambar \ref{figure:fungsi_init2}. Variabel $now$ merepresentasikan nilai \textit{node} saat ini, dan $parent$ merepresentasikan nilai \textit{node} yang menjadi \textit{parent} dari \textit{node} saat ini. Pada fungsi ini dilakukan iterasi untuk mendapatkan total jumlah \textit{child} dari keseluruhan \textit{tree} untuk setiap \textit{node}.
+	\begin{figure}
+		\vspace{-0.7cm}\centering
+		\begin{tabular}{|p{3cm}|p{6cm}|}
+			\hline
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				$\proc{init(now,parent)}$}\\ \hline
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				1 $\proc{\textbf{for}}\quad i \quad \gets \quad 0 \quad \proc{\textbf{to}\quad Sizeof(inp[now]-1)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				2 \quad \If $\proc{inp[now][i]}\gets parent\quad\proc{\textbf{continue}}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				3 \quad $\proc{\textbf{init}(inp[now][i],now)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				4 \quad $\proc{size[now]}\quad\gets\proc{size[now]\quad+\quad size[inp[now][i]}$}\\
+			\hline
+		\end{tabular}
+		\caption{\textit{Pseudocode} Fungsi init \label{figure:fungsi_init2}}
+	\end{figure}
+	\subsubsection{\quad Desain Fungsi \textit{Dfs}}
+	\quad Fungsi DFS merupakan fungsi utama untuk menemukan LIS dari \textit{path} yang ada ditunjukkan oleh Gambar \ref{figure:fungsi_dfs2} dan \ref{figure:fungsi_dfs3}. Parameter variabel yang dibutuhkan adalah $index$ sebagai representasi nilai \textit{node} saat ini, $parent$ sebagai representasi nilai dari \textit{parent} untuk \textit{node} saat ini, \textit{vector of pointer} $*lis$ yang menyimpan nilai untuk LIS, dan \textit{vector of pointer} $*lds$ yang menyimpan nilai untuk LDS. Pada awal fungsi (baris kode 1-5) dilakukan penentuan \textit{node} mana yang menjadi \textit{big child} atau \textit{small child}, hal ini ditentukan dengan cara membandingkan ukuran \textit{node} tersebut dengan \textit{sibling}nya. Kemudian fungsi akan melakukan rekursi ke \textit{node} yang menjadi \textit{smallchild} (baris kode 8-14), dilanjutkan dengan pengecekan apakah \textit{node} tersebut hanya memiliki satu \textit{child} (baris kode 15-20), dan dilanjutkan rekursi ke \textit{node} yang menjadi \textit{bigchild} (baris kode 21-29). Pada prosesnya fungsi \textit{dfs} juga memanggil fungsi lain yaitu $addto$ dan $combine$.
+	 
+	\quad Fungsi \textit{addto} yang ditunjukkan oleh Gambar \ref{figure:fungsi_addto}. Terdapat 2 parameter pada fungsi ini, yaitu \textit{vector of int} $*vec$ yang merupakan pointer yang merujuk ke pada nilai LIS atau LDS saat ini dan $val$ yang merupakan nilai dari \textit{node} saat ini. Fungsi ini akan mencari nilai terkecil dari di dalam \textit{vector} $vec$ yang lebih besar dari $val$, jika tidak ada maka nilai $val$ akan dimasukkan kedalam \textit{vector}, namun jika ada maka nilai didalam \textit{vector} akan diganti oleh $val$.
+	
+	\quad Fungsi \textit{combine} yang ditunjukkan oleh Gambar \ref{figure:fungsi_combine}. Terdapat 2 parameter pda fungsi ini, yaitu \textit{vector of int} $*a$ dan \textit{vector of int} $*b$ dimana keduanya merujuk pada \textit{vector} LIS atau LDS saat ini. Fungsi ini akan membandingkan nilai di tiap index yang sama dari kedua \textit{vector} yang ada dan mencari \textit{vector} manakah yang lebih panjang.
+	\begin{figure}
+		\vspace{-0.5cm}\centering
+		\begin{tabular}{|p{9cm}|p{9cm}|}
+			\hline
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				$\proc{Dfs}(index, parent, *lis, *lds)$}\\ \hline
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				1 $\proc{\textbf{for}}\quad i \quad \gets \quad 0 \quad \proc{\textbf{to}\quad Sizeof(inp[index]-1)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				2 \quad \If \quad $\proc{temp}\quad\gets\proc{parent}\quad\proc{\textbf{continue}}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				3 \quad \If $\proc{size[temp]}>maks$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				4 \quad \quad $\proc{maks}\quad\gets\quad\proc{size[temp]}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				5 \quad \quad $\proc{bigchild}\quad\gets\quad\proc{temp}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				6 $\proc{\textbf{addto}(lis, index)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				7 $\proc{\textbf{addto}(lds, -index)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				8 \If $\proc{bigchild == \textbf{false}}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				9 \quad $\proc{uplis[index] = \textbf{new} vector}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				10 \quad $\proc{\textbf{push}(uplis[index], index)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				11 \quad $\proc{uplds[index] = \textbf{new} vector}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				12 \quad $\proc{\textbf{push}(uplis[index], index)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				13 \quad $\proc{result = \textbf{max}(result, \textbf{sizeof}(lis))}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				14 \quad $\proc{result = \textbf{max}(result, \textbf{sizeof}(lds))}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				15 $\proc{\textbf{else if}(parent != -1 \textbf{and} \textbf{sizeof}inp[index] == 2)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				16 \quad $\proc{\textbf{dfs}(big, index, lis, lds)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				17 \quad $\proc{uplis[index] = uplis[big]}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				18 \quad $\proc{uplds[index] = uplds[big]}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				19 \quad $\proc{\textbf{addto}(uplis[index], index)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				20 \quad $\proc{\textbf{addto}(uplds[index], -index)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				21 $\proc{\textbf{else}}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				22 \quad $\proc{a[] = *lis}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				23 \quad $\proc{b[] = *lds}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				24 \quad $\proc{\textbf{dfs}(big, index, \text{\&}a, \text{\&}b)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				25 \quad $\proc{uplis[index] = uplis[bigchild]}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				26 \quad $\proc{uplds[index] = uplds[bigchild]}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				27 \quad $\proc{\textbf{addto}(uplis[index], index)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				28 \quad $\proc{\textbf{combine}(lis, uplis[index])}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				29 \quad $\proc{\textbf{combine}(lis, uplds[index])}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				30 \quad $\proc{\textbf{for}}\quad i \quad \gets \quad 0 \quad \proc{\textbf{to}\quad Sizeof(inp[index]-1)}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				31 \quad \quad  $\proc{temp = inp[index][i]}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				32 \quad \quad \If $\proc{temp == parent or temp == bigchild} \textbf{continue}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				33 \quad \quad $\proc{a = *lis}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				34 \quad \quad $\proc{b = *lds}$}\\
+			\multicolumn{2}{|p{0.8\textwidth}|}{ %
+				35 \quad \quad $\proc{\textbf{dfs(temp, index, \text{\&}a, \text{\&b})}}$}\\
+			\hline
+		\end{tabular}
+		\caption{\textit{Pseudocode} Fungsi Dfs bagian 1. \label{figure:fungsi_dfs2}}
+	\end{figure}
+		\begin{figure}
+			\vspace{-0.5cm}\centering
+			\begin{tabular}{|p{9cm}|p{9cm}|}
+				\hline
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					36 \quad \quad $\proc{\textbf{addto}(uplis[temp], index)}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					37 \quad \quad $\proc{\textbf{addto}(uplds[temp], -index)}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					38 \quad \quad \If$\proc{i+1 < \textbf{sizeof}inp[index]}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					39 \quad \quad \quad $\proc{\textbf{combine}(lis, uplis[temp])}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					40 \quad \quad \quad $\proc{\textbf{combine}(lds, uplds[temp])}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					41 \quad \quad $\proc{\textbf{delete} uplis[temp]}$}\\
+				\multicolumn{2}{|p{0.8\textwidth}|}{ %
+					42 \quad \quad $\proc{\textbf{delete} uplds[temp]}$}\\
+				\hline
+			\end{tabular}
+			\caption{\textit{Pseudocode} Fungsi Dfs bagian 2. \label{figure:fungsi_dfs3}}
+		\end{figure}
+\begin{figure}
+	\vspace{-0.5cm}\centering
+	\begin{tabular}{|p{9cm}|p{9cm}|}
+		\hline
+		\multicolumn{2}{|p{0.8\textwidth}|}{ %
+			$\proc{\textbf{addto}(*vec, val)}$}\\
+		\multicolumn{2}{|p{0.8\textwidth}|}{ %
+			1 $\proc{p = \textbf{lowerbound}(vec->begin, vec->end, val)}$}\\
+		\multicolumn{2}{|p{0.8\textwidth}|}{ %
+			2 \If$\proc{p == vec->end}$}\\
+		\multicolumn{2}{|p{0.8\textwidth}|}{ %
+			3 \quad $\proc{\textbf{push}(vec,val)}$}\\
+		\multicolumn{2}{|p{0.8\textwidth}|}{ %
+			4 $\proc{\textbf{else}}$}\\
+		\multicolumn{2}{|p{0.8\textwidth}|}{ %
+			5 \quad $\proc{*p = val}$}\\
+		\hline
+	\end{tabular}
+	\caption{\textit{Pseudocode} Fungsi \textit{addto}. \label{figure:fungsi_addto}}
+\end{figure}	
+\begin{figure}
+	\vspace{-0.5cm}\centering
+	\begin{tabular}{|p{9cm}|p{9cm}|}
+		\hline
+		\multicolumn{2}{|p{0.8\textwidth}|}{ %
+			$\proc{\textbf{combine}(*a, *b)}$}\\
+		\multicolumn{2}{|p{0.8\textwidth}|}{ %
+			1 $\proc{p = 0}$}\\
+		\multicolumn{2}{|p{0.8\textwidth}|}{ %
+			2 \While$\proc{\textbf{true}}$}\\
+		\multicolumn{2}{|p{0.8\textwidth}|}{ %
+			3 \quad \If $\proc{p >= \textbf{sizeof}(b) \textbf{break}}$}\\
+		\multicolumn{2}{|p{0.8\textwidth}|}{ %
+			4 \quad $\proc{\textbf{else if} p >= \textbf{sizeof}(a)}$}\\
+		\multicolumn{2}{|p{0.8\textwidth}|}{ %
+			5 \quad \quad $\proc{\textbf{push}(a,(*b)[p])}$}\\
+		\multicolumn{2}{|p{0.8\textwidth}|}{ %
+			6 \quad $\proc{\textbf{else if} p < \textbf{sizeof}(b)}$}\\
+		\multicolumn{2}{|p{0.8\textwidth}|}{ %
+			7 \quad \quad $\proc{*a[p] = \textbf{min}((*a)[p], (*b)[p])}$}\\
+		\multicolumn{2}{|p{0.8\textwidth}|}{ %
+			8 \quad $\proc{p++}$}\\
+		\hline
+	\end{tabular}
+	\caption{\textit{Pseudocode} Fungsi \textit{combine}. \label{figure:fungsi_combine}}
+\end{figure}	
+	
